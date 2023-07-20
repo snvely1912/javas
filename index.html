@@ -1,0 +1,652 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="css/bootstrap.min.css">
+        <script src="link/jquery-3.2.1.slim.min.js"></script>
+        <script src="link/popper.min.js"></script>
+        <script src="link/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="css/style.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+
+        <title>Document</title>
+        <style>
+            .card {
+    background-color: rgba(255, 255, 255, 0.8);
+}
+.form-group input[type="text"],
+.form-group input[type="email"] {
+    transition: all 0.3s ease-in-out;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus {
+    transform: scale(1.05);
+}
+button[type="button"] i {
+    display: inline-block;
+    transition: all 0.3s ease-in-out;
+}
+
+button[type="button"]:hover i {
+    transform: rotate(360deg);
+}
+
+button[type="button"] {
+    transition: all 0.3s ease-in-out;
+}
+.form-group label {
+    font-weight: bold;
+}
+
+.form-degrade {
+    background: linear-gradient(45deg, #14ffb9, #ffffff);
+    /* Remplacez les couleurs ci-dessus par celles de votre choix */
+    transition: background 0.5s ease-in-out;
+}
+
+        </style>
+    </head>
+    <body>
+        <div class="main-wrapper">
+            <nav class="navbar navbar-expand-lg navbar-dark ">
+                <a class="navbar-brand" href="#">GENIE LOGICIEL</a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Gestion Etudiant <span
+                                    class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Liste Note</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Classe
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </li>
+                    </ul>
+                    <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                    </form>
+                </div>
+            </nav>
+        </div>
+        <center>
+        <div class="page-wrapper" style="width:113%; margin-left: -7%; ">
+            <div class="content container-fluid" >
+                <div class="row justify-content-center mt-4">
+                    <div class="col-md-10">
+                        <div class="card" style="background-color: #a7fae1;">
+                            <div class="card-header"  >
+                                <h3 class="card-title"><b>Entrainement Javascript CRUD</b></h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div id="formulaire_saisie" class="form-degrade"  style="border-radius: 10%; height: 350px;">
+                                            <div class="form-group">
+                                                <label for="nom">Nom</label>
+                                                <input type="text" id="nom" class="form-control" style="width: 70%; border-radius: 12px;">
+                                                <span class="error">Veuillez entrer un nom valide (au moins 2 caractères).</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="prenom">Prénom</label>
+                                                <input type="text" id="prenom" class="form-control"  style="width: 70%; border-radius: 12px;">
+                                                <span class="error">Veuillez entrer un prénom valide (au moins 2 caractères).</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="email">Adresse e-mail</label>
+                                                <input type="email" id="email" class="form-control"  style="width: 70%; border-radius: 12px;">
+                                                <span class="error">Veuillez entrer une adresse e-mail valide.</span>
+                                            </div>
+                                            <div class="form-group">
+                                                <button type="button" id="Enregistrer" class="btn btn-outline-dark btn-sm" onclick="enregistrerEtudiant()">Enregistrer</button>
+                                                <button type="button" id="Modifier" style="width: 40%; border-radius: 8px;" class="btn btn-outline-primary btn-sm" onclick="enregistrerModificationsEtudiant()">Modifier</button> &ensp;
+                                                <button type="button" id="reset" style="width: 40%; border-radius: 8px;" class="btn  btn-outline-secondary btn-sm" onclick="annuler()">Annuler</button>
+                                            </div>
+                                            <input type="hidden" id="cellsID">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <table class="table table-bordered" id="listEtudiant">
+                                            <thead>
+                                                <tr >
+                                                    <th hidden>ID</th>
+                                                    <th><b>NOM</b></th>
+                                                    <th>PRENOM</th>
+                                                    <th>E-MAIL</th>
+                                                    <th style="text-align: center;">ACTION</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="tbodyListEtudiant">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="row mt-3">
+                                    <div class="col-md-12 text-right">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" data-toggle="modal"
+                                            data-target="#exampleModal" id="voir_moyenne"
+                                            onclick="afficherMoyennes()"><b>Voir moyennes</b></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- LISTE DES MOYENNES -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">LISTE DES ETUDIANTS ET LEUR MOYENNE</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table" id="listEtudiantMoyenne">
+                                    <thead>
+                                        <tr>
+                                            <b>
+                                                <th>NOM</th>
+                                                <th>PRENOM</th>
+                                                <th>MOYENNE</th>
+                                                <th>APPRECIATION</th>
+                                            </b>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodyMoyenne">
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Quitter</button>
+                        <button type="button" class="btn btn-success">Valider</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AJOUTER NOTE -->
+        <div class="modal fade" id="AjoutNoteEtudiantModal" tabindex="-1" role="dialog"
+            aria-labelledby="AjoutNoteEtudiantModalModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="AjoutNoteEtudiantModalModalLabel">NOTE</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="listMatiere">Matière</label>
+                                <select name="" id="listMatiere" class="form-control">
+                                    <option value="0">Choisir la matière</option>
+                                    <option value="ALGO">Algo</option>
+                                    <option value="JavaScript">JavaScript</option>
+                                    <option value="Langage C">Langage C</option>
+                                    <option value="PHP">PHP</option>
+                                    <option value="Maths">Maths</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <label for="noteEt">Note</label>
+                                <input type="number" id="noteEt" class="form-control">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Quitter</button>
+                        <button type="button" class="btn btn-success" onclick="validerAjoutNote()">Valider</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VOIR NOTE -->
+        <div class="modal fade" id="VoirNoteEtudiantModal" tabindex="-1" role="dialog"
+            aria-labelledby="VoirNoteEtudiantModalModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="VoirNoteEtudiantModalModalLabel"><strong
+                                id="nomCompletEtudiant"></strong></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <table class="table" id="listNoteEt">
+                                    <thead>
+                                        <tr>
+                                            <th>Matière</th>
+                                            <th>NOTE</th>
+                                            <th>Appréciation</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tbodylistNoteEt">
+                                    </tbody>
+                                </table>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Quitter</button>
+                        <button type="button" class="btn btn-success">Valider</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </center>
+        <script>
+            $(document).ready(function () {
+                document.getElementById('Modifier').style.display = 'none';
+                document.getElementById('reset').style.display = 'none';
+                document.getElementById('voir_moyenne').disabled = true;
+                $("#prenom").keyup(function () {
+                    $("#prenom").siblings('span.error').css('display', 'none');
+                })
+                $("#nom").keyup(function () {
+                    $("#nom").siblings('span.error').css('display', 'none');
+                })
+                $("#email").keyup(function () {
+                    $("#email").siblings('span.error').css('display', 'none');
+                })
+            });
+
+            function enregistrerEtudiant() {
+    var isAllValid = true;
+    var nom = $("#nom").val();
+    var prenom = $("#prenom").val();
+    var email = $("#email").val();
+    if (nom.length < 2) {
+        isAllValid = false;
+        $("#nom").siblings('span.error').css('display', 'block');
+    } else {
+        $("#nom").siblings('span.error').css('display', 'none');
+    }
+    if (prenom.length < 2) {
+        isAllValid = false;
+        $("#prenom").siblings('span.error').css('display', 'block');
+    } else {
+        $("#prenom").siblings('span.error').css('display', 'none');
+    }
+    if (email.trim() == '' || email.indexOf('@') == -1) {
+            isAllValid = false;
+            $("#email").siblings('span.error').css('display', 'block');
+        } else {
+            // Vérifier si l'adresse e-mail est unique
+            var tableEtudiants = document.getElementById('tbodyListEtudiant');
+            var isEmailUnique = true;
+
+            for (let i = 0; i < tableEtudiants.rows.length; i++) {
+                if (tableEtudiants.rows[i].cells[3].innerHTML == email) {
+                    isEmailUnique = false;
+                    break;
+                }
+            }
+
+            if (!isEmailUnique) {
+                isAllValid = false;
+                $("#email").siblings('span.error').text('Ce nom d\'utilisateur est déjà utilisé. Essayez un autre nom.').css('display', 'block');
+            } else {
+                $("#email").siblings('span.error').css('display', 'none');
+                
+            }
+        }
+
+    if (isAllValid) {
+        var tbody = $("#tbodyListEtudiant");
+        var table = document.getElementById('tbodyListEtudiant');
+        if (table.rows.length == 0) {
+            document.getElementById('voir_moyenne').disabled = true;
+        } else {
+            document.getElementById('voir_moyenne').disabled = false;
+        }
+        const colonne = document.querySelectorAll('#tbodyListEtudiant tr td:first-child');
+        let plusGrandNombre = 0;
+        var table = document.getElementById('tbodyListEtudiant');
+        var taille_tab = table.rows.length;
+        if (taille_tab == 0) {
+            plusGrandNombre = 0;
+        } else {
+            plusGrandNombre = parseInt(colonne[0].textContent);
+        }
+        for (let i = 1; i < colonne.length; i++) {
+            const nombre = parseInt(colonne[i].textContent);
+            if (nombre > plusGrandNombre) {
+                plusGrandNombre = nombre;
+            }
+        }
+        
+        var ID = plusGrandNombre + 1;
+        var list = "<tr>" +
+            "<td hidden>" +
+            ID +
+            "</td>" +
+            "<td>" +
+            nom +
+            "</td>" +
+            "<td>" +
+            prenom +
+            "</td>" +
+            "<td>" +
+            email +
+            "</td>" +
+            "<td style='display: flex;'>" +
+            "<button type='button' class='btn btn-outline-primary btn-sm' onclick='modifierEtudiant(this)'>Modifier</button>" +
+            "&nbsp;&nbsp;" +
+            "<button type='button' class='btn btn-outline-danger btn-sm' onclick='supprimerEtudiant(this)'>Supprimer</button>" +
+            "&nbsp;&nbsp;" +
+            "<button type='button' class='btn btn-outline-warning btn-sm' onclick='ajouterNoteEtudiant(this)'>Ajouter Note</button>" +
+            "&nbsp;&nbsp;" +
+            "<button type='button' class='btn btn-outline-dark btn-sm' onclick='voirNoteEtudiant(this)'>Voir Note</button>" +
+            "</td>" +
+            "</tr>";
+        tbody.append(list);
+        $("#nom").val('');
+        $("#prenom").val('');
+        $("#email").val('');
+        document.getElementById('voir_moyenne').disabled = false;
+        afficherMoyennes();
+    }
+}
+
+            function modifierEtudiant(td) {
+                var selectedRow = td.parentElement.parentElement;
+                document.getElementById('Modifier').style.display = 'block';
+                document.getElementById('reset').style.display = 'block';
+                document.getElementById('Enregistrer').style.display = 'none';
+                document.getElementById('nom').value = selectedRow.cells[0].nextElementSibling.textContent;
+                document.getElementById('prenom').value = selectedRow.cells[1].textContent;
+                document.getElementById('email').value = selectedRow.cells[2].textContent;
+                document.getElementById('cellsID').value = selectedRow.cells[0].textContent;
+            }
+            function enregistrerModificationsEtudiant() {
+    // Récupérer l'ID de l'étudiant à modifier
+    var idEtudiant = document.getElementById('cellsID').value;
+    
+    // Récupérer les nouvelles valeurs des champs du formulaire
+    var nom = document.getElementById('nom').value;
+    var prenom = document.getElementById('prenom').value;
+    var email = document.getElementById('email').value;
+    
+    var isEmailValid = true;
+    if (email.trim() == '' || email.indexOf('@') == -1) {
+        isEmailValid = false;
+        $("#email").siblings('span.error').css('display', 'block');
+    } else {
+        var tableEtudiants = document.getElementById('tbodyListEtudiant');
+        for (let i = 0; i < tableEtudiants.rows.length; i++) {
+            if (tableEtudiants.rows[i].cells[0].innerHTML != idEtudiant && tableEtudiants.rows[i].cells[3].innerHTML == email) {
+                isEmailValid = false;
+                $("#email").siblings('span.error').css('display', 'block');
+                break;
+            }
+        }
+        
+        if (isEmailValid) {
+            $("#email").siblings('span.error').css('display', 'none');
+        }
+    }
+    
+    if (isEmailValid) {
+        var table = document.getElementById('tbodyListEtudiant');
+        for (var i = 0; i < table.rows.length; i++) {
+            if (table.rows[i].cells[0].innerHTML == idEtudiant) {
+                table.rows[i].cells[1].innerHTML = nom;
+                table.rows[i].cells[2].innerHTML = prenom;
+                table.rows[i].cells[3].innerHTML = email;
+                break;
+            }
+        }
+        afficherMoyennes();
+        annuler();
+    }
+}
+function afficherMoyennes() {
+    var tbody = document.getElementById('tbodyMoyenne');
+    tbody.innerHTML = '';
+    var tableEtudiants = document.getElementById('tbodyListEtudiant');
+    var tableNotes = document.getElementById('listNoteEtudiant');
+    var nbre_etudiant = tableEtudiants.rows.length;
+    var somme = 0;
+    for (let i = 0; i < nbre_etudiant; i++) {
+        // Récupérer l'ID de l'étudiant
+        var idEtudiant = tableEtudiants.rows[i].cells[0].innerHTML;
+
+        // Récupérer les notes de l'étudiant
+        var notesEtudiant = [];
+        for (let j = 0; j < tableNotes.rows.length; j++) {
+            if (tableNotes.rows[j].cells[0].innerHTML == idEtudiant) {
+                notesEtudiant.push(parseFloat(tableNotes.rows[j].cells[1].innerHTML)); // Correction de l'index de la cellule
+            }
+        }
+
+        // Calculer la moyenne des notes de l'étudiant
+        var note = 0;
+        if (notesEtudiant.length > 0) {
+            var sommeNotes = 0;
+            for (let j = 0; j < notesEtudiant.length; j++) {
+                sommeNotes += notesEtudiant[j];
+            }
+            note = sommeNotes / notesEtudiant.length;
+        }
+
+        // Déterminer l'appréciation en fonction de la moyenne
+        var appreciation = "";
+        if (note >= 0 && note <= 10) {
+            appreciation = "Insuffisant";
+        } else if (note > 10 && note <= 12) {
+            appreciation = "Passable";
+        } else if (note >= 13 && note < 15) {
+            appreciation = "Assez-Bien";
+        } else if (note >= 15 && note <= 20) {
+            appreciation = "T.Bien";
+        } else {
+            appreciation = "Note incorrecte";
+        }
+
+        // Ajouter une ligne à la liste des moyennes
+        var row = "<tr><td>" + tableEtudiants.rows[i].cells[1].innerHTML + "</td><td>" +
+            tableEtudiants.rows[i].cells[2].innerHTML + "</td><td>" + note.toFixed(2) + "</td><td>" + appreciation + "</td></tr>";
+        tbody.innerHTML += row;
+
+        // Ajouter la note à la somme pour calculer la moyenne générale
+        somme += note;
+    }
+
+    // Calculer et afficher la moyenne générale
+    var moyenne = somme / nbre_etudiant;
+    var row = "<tr><td colspan='2'><b>MOYENNE GENERALE</b></td><td colspan='2'><b>" + moyenne.toFixed(2) +
+        "</b></td></tr>";
+    tbody.innerHTML += row;
+
+    // Vérifier si la moyenne générale est valide
+    if (isNaN(moyenne) || moyenne < 0 || moyenne > 20) {
+        var alertElement = document.createElement('div');
+        alertElement.classList.add('alert', 'alert-danger', 'animated', 'fadeInDown');
+        alertElement.innerHTML = '<strong>Erreur :</strong> La moyenne générale est invalide. Veuillez vérifier les notes des étudiants.';
+        document.body.appendChild(alertElement);
+
+        setTimeout(function () {
+            alertElement.classList.add('fadeOutUp');
+            setTimeout(function () {
+                alertElement.remove();
+            }, 1000);
+        }, 3000);
+    } else {
+        $("#exampleModal").modal('show');
+    }
+}
+
+
+            function annuler() {
+                $("#nom").val('');
+                $("#prenom").val('');
+                $("#email").val('');
+                document.getElementById('Modifier').style.display = 'none';
+                document.getElementById('reset').style.display = 'none';
+                document.getElementById('Enregistrer').style.display = 'block';
+            }
+
+            function ajouterNoteEtudiant(td) {
+                var selectedRow = td.parentElement.parentElement;
+                var nom = selectedRow.cells[1].innerHTML;
+                var prenom = selectedRow.cells[2].innerHTML;
+                document.getElementById('nomCompletEtudiant').innerHTML = nom + ' ' + prenom;
+                $("#AjoutNoteEtudiantModal").modal('show');
+            }
+
+            function voirNoteEtudiant(td) {
+    var selectedRow = td.parentElement.parentElement;
+    var nom = selectedRow.cells[1].innerHTML;
+    var prenom = selectedRow.cells[2].innerHTML;
+    document.getElementById('nomCompletEtudiant').innerHTML = nom + ' ' + prenom;
+    $("#VoirNoteEtudiantModal").modal('show');
+
+    var notesEtudiant = [];
+    var tbodyNotes = document.getElementById('tbodylistNoteEt');
+
+    for (var i = 0; i < tbodyNotes.rows.length; i++) {
+        var matiere = tbodyNotes.rows[i].cells[0].innerHTML;
+        var note = parseFloat(tbodyNotes.rows[i].cells[1].innerHTML);
+        var appreciation = "";
+
+        if (note >= 0 && note < 10) {
+            appreciation = "Insuffisant";
+        } else if (note >= 10 && note < 12) {
+            appreciation = "Passable";
+        } else if (note >= 12 && note < 14) {
+            appreciation = "Assez-Bien";
+        } else if (note >= 14 && note < 16) {
+            appreciation = "Bien";
+        }else if (note >= 16 && note < 18) {
+            appreciation = "T.Bien";
+        } else if (note >= 18 && note < 20) {
+            appreciation = "Excellent";
+        }else {
+            appreciation = "Note incorrecte";
+        }
+
+        notesEtudiant.push({ matiere: matiere, note: note, appreciation: appreciation });
+    }
+
+    var tbody = document.getElementById('tbodylistNoteEt');
+    tbody.innerHTML = "";
+
+    for (var i = 0; i < notesEtudiant.length; i++) {
+        var matiereCell = document.createElement('td');
+        matiereCell.innerHTML = notesEtudiant[i].matiere;
+
+        var noteCell = document.createElement('td');
+        noteCell.innerHTML = notesEtudiant[i].note;
+
+        var appreciationCell = document.createElement('td');
+        appreciationCell.innerHTML = notesEtudiant[i].appreciation;
+
+        var actionCell = document.createElement('td');
+        actionCell.innerHTML = '<button type="button" class="btn btn-outline-danger btn-sm" onclick="supprimerLigne(this)">Supprimer</button>';
+
+        var newRow = document.createElement('tr');
+        newRow.appendChild(matiereCell);
+        newRow.appendChild(noteCell);
+        newRow.appendChild(appreciationCell);
+        newRow.appendChild(actionCell);
+
+        tbody.appendChild(newRow);
+    }
+}
+
+
+
+
+
+
+function validerAjoutNote() {
+    var matiere = document.getElementById('listMatiere').value;
+    var note = parseInt(document.getElementById('noteEt').value);
+
+    if (isNaN(note) || note < 0 || note > 20) {
+        alert("Veuillez entrer une note valide entre 0 et 20.");
+        return;
+    }
+
+    var tbody = document.getElementById('tbodylistNoteEt');
+    var row = "<tr><td>" + matiere + "</td><td>" + note +
+        "</td><td><button type='button' class='btn btn-outline-danger btn-sm' onclick='supprimerLigne(this)'>Supprimer</button></td></tr>";
+    tbody.innerHTML += row;
+    document.getElementById('listMatiere').value = '0';
+    document.getElementById('noteEt').value = '';
+    $("#AjoutNoteEtudiantModal").modal('hide');
+}
+
+
+            function supprimerLigne(td) {
+                if (confirm('Êtes-vous sûr de vouloir supprimer cette ligne ?')) {
+                    var row = td.parentElement.parentElement;
+                    row.remove();
+                }
+            }
+
+            function calculerMoyenne() {
+                var tbody = document.getElementById('tbodylistNoteEt');
+                var sum = 0;
+                var count = 0;
+                for (var i = 0; i < tbody.rows.length; i++) {
+                    var note = parseInt(tbody.rows[i].cells[1].innerHTML);
+                    sum += note;
+                    count++;
+                }
+                var moyenne = sum / count;
+                return moyenne.toFixed(2);
+            }
+
+           
+
+
+
+            function supprimerEtudiant(td) {
+                if (confirm('Êtes-vous sûr de vouloir supprimer cet étudiant ?')) {
+                    var row = td.parentElement.parentElement;
+                    row.remove();
+                    var table = document.getElementById('tbodyListEtudiant');
+                    var nbre_etudiant = table.rows.length;
+                    if (nbre_etudiant == 0) {
+                        document.getElementById('voir_moyenne').disabled = true;
+                    }
+                }
+            }
+            
+        </script>
+    </body>
+    </html>
